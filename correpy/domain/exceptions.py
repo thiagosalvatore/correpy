@@ -1,0 +1,2 @@
+class InvalidBrokerageNoteFeeTypeException(Exception):
+    pass

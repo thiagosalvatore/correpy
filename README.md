@@ -1,11 +1,13 @@
 [![thiagosalvatore](https://circleci.com/gh/thiagosalvatore/correpy.svg?style=shield)](https://app.circleci.com/pipelines/github/thiagosalvatore/correpy?branch=main&filter=all)
-
+[![PyPI version](https://badge.fury.io/py/correpy.svg)](https://badge.fury.io/py/correpy)
 # CorrePy
 CorrePy (Corretagem Python) é uma lib responsável por parsear notas de corretagem no padrão B3 (Sinacor) e retornar os
 dados em um formato estruturado para que você possa utilizar em suas aplicações.
 
 ## Instalação
-TODO
+Este projeto suporta qualquer versão do python >= 3.8
+
+`pip install correpy`
 
 ## Como usar
 Depois de instalada, sua utilização é extremamente simples. Primeiramente vamos precisar abrir o PDF com a nota de corretagem.

@@ -13,7 +13,7 @@ jobs:
           pkg-manager: poetry
       - run:
           name: Run tests
-          command: poetry run pytest
+          command: poetry run coverage run -m pytest
 
   publish:
     docker:

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "correpy"
-version = "0.1.0"
+version = "0.1.1"
 description = "CorrePy (Corretagem Python) é uma lib responsável por parsear notas de corretagem no padrão B3 (Sinacor) e retornar os dados no formato JSON."
 authors = ["Thiago  Salvatore <thiago.salvatore@gmail.com>"]
 license = "Apache License 2.0"
@@ -12,7 +12,7 @@ include = ["LICENSE"]
 
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 PyMuPDF = "^1.19.4"
 
 [tool.poetry.dev-dependencies]
@@ -23,11 +23,12 @@ pylint = "^2.14.0"
 mypy = "^0.960"
 isort = "^5.10.1"
 testfixtures = "^6.18.5"
+coverage = "^6.4.1"
 
 
 [tool.black]
 line-length = 120
-target-version = ['py39']
+target-version = ['py38']
 include = '\.pyi?$'
 exclude = '''
 (

@@ -1,4 +1,5 @@
 import io
+import typing
 from typing import List, Optional
 
 import fitz
@@ -9,8 +10,7 @@ from correpy.parsers.exceptions import InvalidPasswordException, ProblemParsingB
 
 
 class FitzParser:
-
-    def __init__(self, file: io.BytesIO, password: str) -> None:
+    def __init__(self, file: io.BytesIO, password: Optional[str]) -> None:
         self.document: Optional[Document] = None
         self.words: List[List[WordRectangle]] = []
 
@@ -18,31 +18,25 @@ class FitzParser:
 
     @classmethod
     def build_rectangle_from_beginning_first_rectangle_end_second_rectangle(
-            cls,
-            first_rect: fitz.Rect,
-            second_rect: fitz.Rect
+        cls, first_rect: fitz.Rect, second_rect: fitz.Rect
     ) -> fitz.Rect:
         return first_rect | second_rect
 
     @classmethod
     def is_word_in_rectangle(cls, *, rectangle: fitz.Rect, word: WordRectangle) -> bool:
-        return fitz.Rect(word.x0, word.y0, word.x1, word.y1).intersects(rectangle)
+        return typing.cast(bool, fitz.Rect(word.x0, word.y0, word.x1, word.y1).intersects(rectangle))
 
     @classmethod
-    def search_and_extract_rectangle_from_text(cls, *, page: TextPage, text: str) -> Optional[fitz.Rect]:
+    def search_and_extract_rectangle_from_text(cls, *, page: TextPage, text: str) -> fitz.Rect:
         quadrilateral_position = page.search(text)
         if not quadrilateral_position:
             raise ProblemParsingBrokerageNoteException
         return quadrilateral_position[0].rect
 
     def get_words_in_rectangle(self, *, page_number: int, rectangle: fitz.Rect) -> List[WordRectangle]:
-        return [
-            word
-            for word in self.words[page_number]
-            if self.is_word_in_rectangle(rectangle=rectangle, word=word)
-        ]
+        return [word for word in self.words[page_number] if self.is_word_in_rectangle(rectangle=rectangle, word=word)]
 
-    def __parse(self, *, file: io.BytesIO, password: str) -> None:
+    def __parse(self, *, file: io.BytesIO, password: Optional[str]) -> None:
         doc: Document = fitz.open(stream=file, filetype="pdf")
         authenticated = doc.authenticate(password)
         if not authenticated:
@@ -52,11 +46,11 @@ class FitzParser:
         self.__read_pages_and_words_from_pages()
 
     def __read_pages_and_words_from_pages(self) -> None:
-        for page in self.document:
+        for page in self.document:  # type:ignore[union-attr]
             text_page = page.get_textpage()
             self.words.append(self.__parse_fitz_word_tuple_to_word_object(text_page))
 
     @staticmethod
-    def __parse_fitz_word_tuple_to_word_object(text_page: fitz.TextPage):
+    def __parse_fitz_word_tuple_to_word_object(text_page: fitz.TextPage) -> List[WordRectangle]:
         extracted_words = text_page.extractWORDS()
         return [WordRectangle(word[0], word[1], word[2], word[3], word[4]) for word in extracted_words]

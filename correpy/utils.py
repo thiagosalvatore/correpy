@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, date
+from datetime import date, datetime
 from decimal import Decimal
 
 NUMBER_STRUCTURE_REGEX = r"(?:[1-9]\d{0,2}(?:\.\d{3})*|0)(?:,\d{1,2})"

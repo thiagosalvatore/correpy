@@ -8,8 +8,7 @@ from correpy.domain.enums import TransactionType
 
 
 class SecurityFactory(factory.Factory):
-    name = factory.Faker('name')
-    ticker = factory.Faker('name')
+    name = factory.Faker("name")
 
     class Meta:
         model = Security
@@ -17,7 +16,7 @@ class SecurityFactory(factory.Factory):
 
 class TransactionFactory(factory.Factory):
     transaction_type = FuzzyChoice(TransactionType)
-    amount = factory.Faker('pyint')
+    amount = factory.Faker("pyint")
     unit_price = factory.Faker("pydecimal", right_digits=2, max_value=1000, min_value=1, positive=True)
     security = factory.SubFactory(SecurityFactory)
 

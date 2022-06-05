@@ -9,7 +9,7 @@ from correpy.domain.exceptions import InvalidBrokerageNoteFeeTypeException
 
 
 @dataclass
-class BrokerageNote:
+class BrokerageNote:  # pylint:disable=too-many-instance-attributes
     reference_date: date
     settlement_fee: Decimal = Decimal(0)
     registration_fee: Decimal = Decimal(0)

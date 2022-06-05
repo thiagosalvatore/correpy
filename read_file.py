@@ -3,7 +3,7 @@ from pprint import pprint
 
 from correpy.parsers.brokerage_notes.b3_parser.b3_parser import B3Parser
 
-with open('/Users/thiagosalvatore/Downloads/NotaNegociacao_600655_20220201.pdf', 'rb') as f:
+with open('/Users/thiagosalvatore/Projects/Personal/correpy/tests/fixtures/b3_one_page.pdf', 'rb') as f:
     content = io.BytesIO(f.read())
     content.seek(0)
 

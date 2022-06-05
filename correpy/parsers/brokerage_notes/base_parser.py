@@ -3,14 +3,14 @@ from abc import ABC, abstractmethod
 from datetime import date
 from decimal import Decimal
 from itertools import groupby
-from typing import Dict, List, Tuple, Iterable, Optional
+from typing import Dict, Iterable, List, Optional, Tuple
 
 import fitz
 
 from correpy.domain.entities.brokerage_note import BrokerageNote
 from correpy.domain.entities.security import Security
 from correpy.domain.entities.transaction import Transaction
-from correpy.domain.enums import TransactionType, BrokerageNoteFeeType
+from correpy.domain.enums import BrokerageNoteFeeType, TransactionType
 from correpy.parsers.brokerage_notes.brokerage_note_section import BrokerageNoteSection
 from correpy.parsers.brokerage_notes.word_rectangle import WordRectangle
 from correpy.parsers.fitz_parser import FitzParser
@@ -38,7 +38,7 @@ class BaseBrokerageNoteParser(ABC):
 
     @property
     @abstractmethod
-    def transaction_columns_index(self) -> Dict:
+    def transaction_columns_index(self) -> Dict[str, int]:
         ...
 
     @property
@@ -52,8 +52,11 @@ class BaseBrokerageNoteParser(ABC):
         ...
 
     @classmethod
-    def _group_words_by_line(cls, *, words: Iterable[WordRectangle]) -> Iterable[Iterable[WordRectangle]]:
-        return [list(grouped_word[1]) for grouped_word in groupby(words, key=lambda word: word.y1)]
+    def _group_words_by_line(cls, *, words: Iterable[WordRectangle]) -> List[List[WordRectangle]]:
+        return [
+            list(grouped_word[1])
+            for grouped_word in groupby(words, key=lambda word: word.y1)  # type:ignore[no-any-return]
+        ]
 
     @classmethod
     def _sort_words_per_line_then_per_column(cls, words: List[WordRectangle]) -> Iterable[WordRectangle]:
@@ -64,21 +67,16 @@ class BaseBrokerageNoteParser(ABC):
         return " ".join(line)
 
     def _build_text_from_all_words_in_line(
-            self,
-            words_grouped_by_line: Iterable[Tuple[float, Iterable[WordRectangle]]]
+        self, words_grouped_by_line: Iterable[Tuple[float, Iterable[WordRectangle]]]
     ) -> str:
-        return "".join(
-            self._build_text_from_words(words=words)
-            for _, words in words_grouped_by_line
-        )
+        return "".join(self._build_text_from_words(words=words) for _, words in words_grouped_by_line)
 
     @staticmethod
     def _get_text_line_from_list_of_words(*, words: Iterable[WordRectangle]) -> List[str]:
         return [word.value for word in words]
 
     def _sort_and_group_elements_by_line_on_file(
-            self,
-            elements: List[WordRectangle]
+        self, elements: List[WordRectangle]
     ) -> Iterable[Iterable[WordRectangle]]:
         elements_text = self._sort_words_per_line_then_per_column(words=elements)
         return self._group_words_by_line(words=elements_text)
@@ -91,9 +89,8 @@ class BaseBrokerageNoteParser(ABC):
 
     def __parse_security_name(self, *, line_array: List[str]) -> str:
         security_name_array = line_array[
-                              self.transaction_columns_index["start_short_name"]: self.transaction_columns_index[
-                                  "end_short_name"]
-                              ]
+            self.transaction_columns_index["start_short_name"] : self.transaction_columns_index["end_short_name"]
+        ]
         return " ".join(security_name_array)
 
     def __parse_transaction_unit_price(self, *, line_array: List[str]) -> Decimal:
@@ -115,24 +112,20 @@ class BaseBrokerageNoteParser(ABC):
             transaction_type=transaction_type,
             amount=amount,
             unit_price=unit_price,
-            security=Security(
-                name=security_name
-            )
+            security=Security(name=security_name),
         )
 
     def _build_brokerage_note_section_from_two_rectangles(
-            self,
-            first_rectangle: fitz.Rect,
-            second_rectangle: fitz.Rect,
-            page_number: int,
+        self,
+        first_rectangle: fitz.Rect,
+        second_rectangle: fitz.Rect,
+        page_number: int,
     ) -> BrokerageNoteSection:
         rectangle_between = self.fitz_parser.build_rectangle_from_beginning_first_rectangle_end_second_rectangle(
-            first_rect=first_rectangle,
-            second_rect=second_rectangle
+            first_rect=first_rectangle, second_rect=second_rectangle
         )
         rectangle_text_elements = self.fitz_parser.get_words_in_rectangle(
-            page_number=page_number,
-            rectangle=rectangle_between
+            page_number=page_number, rectangle=rectangle_between
         )
         grouped_words = self._sort_and_group_elements_by_line_on_file(elements=rectangle_text_elements)
         return BrokerageNoteSection(words_grouped_by_line=grouped_words)

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 class Security:
     name: str
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.__cleanup_name()
 
     def __cleanup_name(self) -> None:

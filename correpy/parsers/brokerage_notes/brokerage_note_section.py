@@ -22,7 +22,4 @@ class BrokerageNoteSection:
 
     @property
     def full_text(self) -> str:
-        return "".join(
-            self.get_text_from_words(words=words)
-            for words in self.words_grouped_by_line
-        )
+        return "".join(self.get_text_from_words(words=words) for words in self.words_grouped_by_line)

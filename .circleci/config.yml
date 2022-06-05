@@ -13,7 +13,12 @@ jobs:
           pkg-manager: poetry
       - run:
           name: Run tests
-          command: poetry run coverage run -m pytest
+          command: |
+            poetry run coverage run -m pytest
+            poetry run coverage report
+      
+      - store_artifacts:
+          path: htmlcov
 
   publish:
     docker:

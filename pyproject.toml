@@ -1,9 +1,15 @@
 [tool.poetry]
 name = "correpy"
 version = "0.1.0"
-description = "CorrePy (Corretagem Python) é uma lib responsável por parsear notas de corretagem no padrão B3 e retornar os dados no formato JSON."
+description = "CorrePy (Corretagem Python) é uma lib responsável por parsear notas de corretagem no padrão B3 (Sinacor) e retornar os dados no formato JSON."
 authors = ["Thiago  Salvatore <thiago.salvatore@gmail.com>"]
 license = "Apache License 2.0"
+keywords = ["corretagem", "parser", "b3", "nota de corretagem", "imposto de renda"]
+readme = "README.md"
+homepage = "https://github.com/thiagosalvatore/correpy"
+repository = "https://github.com/thiagosalvatore/correpy"
+include = ["LICENSE"]
+
 
 [tool.poetry.dependencies]
 python = "^3.9"

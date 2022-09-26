@@ -99,7 +99,9 @@ class BaseBrokerageNoteParser(ABC):
         return Decimal(unit_value_string)
 
     def __parse_transaction_amount(self, *, line_array: List[str]) -> int:
-        return int(line_array[self.transaction_columns_index["amount"]])
+        amount_string = line_array[self.transaction_columns_index["amount"]]
+        amount_string = amount_string.replace(".", "")
+        return int(amount_string)
 
     def _create_transaction(self, *, line: str) -> Transaction:
         line_array = line.split(" ")

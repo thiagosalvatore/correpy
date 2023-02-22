@@ -16,7 +16,7 @@ class NunInvestParser(B3Parser):
 	financial_summary_header_mapper = {
 		"Taxa de Liquidação": BrokerageNoteFeeType.SETTLEMENT_FEE,
 		"Taxa de Registro": BrokerageNoteFeeType.REGISTRATION_FE,
-		"Taxa de termo/opções": BrokerageNoteFeeType.TERM_FEE,
+		"Taxa de Termo / Opções": BrokerageNoteFeeType.TERM_FEE,
 		"Taxa A.N.A.": BrokerageNoteFeeType.ANA_FEE,
 		"Emolumentos": BrokerageNoteFeeType.EMOLUMENTS,
 		"Taxa Operacional": BrokerageNoteFeeType.OPERATIONAL_FEE,

@@ -28,7 +28,14 @@ class FitzParser:
 
     @classmethod
     def search_and_extract_rectangle_from_text(cls, *, page: TextPage, text: str) -> fitz.Rect:
-        quadrilateral_position = page.search(text)
+        if isinstance(text, str):
+            text = [text]
+        for text in text:
+            # multitext search
+            if quadrilateral_position := page.search(text):
+                break
+        else:
+            quadrilateral_position = None
         if not quadrilateral_position:
             raise ProblemParsingBrokerageNoteException
         return quadrilateral_position[0].rect

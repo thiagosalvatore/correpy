@@ -9,7 +9,12 @@ from correpy.parsers.brokerage_notes.brokerage_note_section import BrokerageNote
 class NunInvestParser(B3Parser):
 	CI_TITLE = "Pav. 14, 15 - Torre A2 Jequitibá - Condomínio Parque da Cidade"
 	TRANSACTIONS_SECTION_TITLE = 'Nome do Cliente'
-	TRANSACTIONS_SUMMARY_TITLE = 'Resumo dos Negócios'
+	TRANSACTIONS_SUMMARY_TITLE = (
+		# sigle page
+		"Resumo dos Negócios",
+		# multipage: end of page
+		"Ouvidoria NuInvest Corretora de Valores S.A"
+	)
 	first_column_transactions = "Mercado"
 	last_transaction_item = "BOVESPA"
 

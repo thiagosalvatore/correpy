@@ -1,5 +1,6 @@
 import logging
 from datetime import date
+from re import sub
 from typing import List
 
 import fitz
@@ -130,6 +131,7 @@ class B3Parser(BaseBrokerageNoteParser):
                     transactions_brokerage_note_section=transactions_brokerage_note_section
                 )
                 for transaction in transactions:
+                    transaction = sub(pattern=r"^N\s", repl="", string=transaction)
                     transaction_item = self._create_transaction(line=transaction)
                     brokerage_note.add_transaction(transaction=transaction_item)
 

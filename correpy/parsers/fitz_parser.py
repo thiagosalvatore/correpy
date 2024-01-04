@@ -1,6 +1,6 @@
 import io
 import typing
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import fitz
 from fitz import Document, TextPage
@@ -27,8 +27,15 @@ class FitzParser:
         return typing.cast(bool, fitz.Rect(word.x0, word.y0, word.x1, word.y1).intersects(rectangle))
 
     @classmethod
-    def search_and_extract_rectangle_from_text(cls, *, page: TextPage, text: str) -> fitz.Rect:
-        quadrilateral_position = page.search(text)
+    def search_and_extract_rectangle_from_text(cls, *, page: TextPage, text: Union[str, List[str]]) -> fitz.Rect:
+        if isinstance(text, str):
+            text = [text]
+        for text in text:
+            # multitext search
+            if quadrilateral_position := page.search(text):
+                break
+        else:
+            quadrilateral_position = None
         if not quadrilateral_position:
             raise ProblemParsingBrokerageNoteException
         return quadrilateral_position[0].rect

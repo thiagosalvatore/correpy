@@ -2,8 +2,14 @@ import re
 from dataclasses import dataclass
 from typing import Optional
 
-BASIC_TICKER_PATTERN = "([A-Z]{4})(3|4|11)(F|B)?"  # Format XXXXY or XXXXYF or XXXXYB where Y can be 3, 4, 11
-BDR_TICKER_PATTERN = "([A-Z]{4})(31|32|33|34|35|36|39)"  # Format XXXXYY where YY can be 31, 32, 33, 34, 35, 36, 39
+# 3	Ordinárias / VALE3
+# 4	Preferenciais / GGBR4
+# 5	Preferenciais Classe A / USIM5
+# 6	Preferenciais Classe B / ELET6
+# 11 BDRs, ETs e Units / BOVA11
+
+BASIC_TICKER_PATTERN = "([A-Z-0-9]{4})(2|3|4|5|6|11|12)(F|B)?"  # Format XXXXY or XXXXYF or XXXXYB where Y can be 3, 4, 11
+BDR_TICKER_PATTERN = "([A-Z-0-9]{4})(31|32|33|34|35|36|39)"  # Format XXXXYY where YY can be 31, 32, 33, 34, 35, 36, 39
 
 
 @dataclass

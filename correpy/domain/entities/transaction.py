@@ -10,7 +10,7 @@ BRAZIL_SOURCE_WITHHELD_TAX_PERCENTAGE = Decimal(0.005)
 @dataclass
 class Transaction:
     transaction_type: TransactionType
-    amount: int
+    amount: Decimal
     unit_price: Decimal
     security: Security
     source_withheld_taxes: Decimal = field(init=False, default=Decimal(0))

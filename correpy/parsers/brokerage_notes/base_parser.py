@@ -14,6 +14,7 @@ from correpy.domain.enums import BrokerageNoteFeeType, TransactionType
 from correpy.parsers.brokerage_notes.brokerage_note_section import BrokerageNoteSection
 from correpy.parsers.brokerage_notes.word_rectangle import WordRectangle
 from correpy.parsers.fitz_parser import FitzParser
+from correpy.utils import extract_value_from_line
 
 
 class BaseBrokerageNoteParser(ABC):
@@ -95,13 +96,11 @@ class BaseBrokerageNoteParser(ABC):
 
     def __parse_transaction_unit_price(self, *, line_array: List[str]) -> Decimal:
         unit_value_string = line_array[self.transaction_columns_index["unit_value"]]
-        unit_value_string = unit_value_string.replace(",", ".")
-        return Decimal(unit_value_string)
+        return extract_value_from_line(line=unit_value_string)
 
-    def __parse_transaction_amount(self, *, line_array: List[str]) -> int:
+    def __parse_transaction_amount(self, *, line_array: List[str]) -> Decimal:
         amount_string = line_array[self.transaction_columns_index["amount"]]
-        amount_string = amount_string.replace(".", "")
-        return int(amount_string)
+        return extract_value_from_line(line=amount_string)
 
     def _create_transaction(self, *, line: str) -> Transaction:
         line_array = line.split(" ")

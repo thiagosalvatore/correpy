@@ -16,8 +16,8 @@ class SecurityFactory(factory.Factory):
 
 class TransactionFactory(factory.Factory):
     transaction_type = FuzzyChoice(TransactionType)
-    amount = factory.Faker("pyint")
-    unit_price = factory.Faker("pydecimal", right_digits=2, max_value=1000, min_value=1, positive=True)
+    amount = factory.Faker("pydecimal", max_value=100000, min_value=1, positive=True)
+    unit_price = factory.Faker("pydecimal", right_digits=2, max_value=10000, min_value=1, positive=True)
     security = factory.SubFactory(SecurityFactory)
 
     class Meta:

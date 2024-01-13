@@ -27,7 +27,7 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          pkg-manager: poetry
+          pkg-manager: poetry@1.7.1
       - run:
           name: Build project
           command: poetry build

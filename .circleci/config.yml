@@ -9,6 +9,11 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
+      - run:
+          # this is a workaround until circleci will support poetry 1.2.0
+          name: Update poetry
+          command: |
+            poetry self update
       - python/install-packages:
           pkg-manager: poetry
       - run:

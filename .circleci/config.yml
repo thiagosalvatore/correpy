@@ -29,6 +29,11 @@ jobs:
       - python/install-packages:
           pkg-manager: poetry
       - run:
+          # this is a workaround until circleci will support poetry 1.2.0
+          name: Update poetry
+          command: |
+            poetry self update
+      - run:
           name: Build project
           command: poetry build
       - run:

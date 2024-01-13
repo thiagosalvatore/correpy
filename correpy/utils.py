@@ -8,7 +8,7 @@ DATE_STRUCTURE_REGEX = r"[\d]{1,2}/[\d]{1,2}/[\d]{4}"
 
 def extract_value_from_line(*, line: str) -> Decimal:
     if total_value := re.findall(NUMBER_STRUCTURE_REGEX, line):
-        return Decimal(total_value[0].replace(".", "").replace(",", "."))
+        return Decimal(total_value[-1].replace(".", "").replace(",", "."))
 
     return Decimal(0)
 

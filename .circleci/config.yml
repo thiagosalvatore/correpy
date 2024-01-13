@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@1.5.0
+  python: circleci/python@2.1.1
 
 jobs:
   build-and-test:
@@ -9,6 +9,11 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
+      - run:
+          # this is a workaround until circleci will support poetry 1.2.0
+          name: Update poetry
+          command: |
+            curl -sSL https://install.python-poetry.org | python3 -
       - python/install-packages:
           pkg-manager: poetry
       - run:
@@ -26,6 +31,11 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
+      - run:
+          # this is a workaround until circleci will support poetry 1.2.0
+          name: Update poetry
+          command: |
+            curl -sSL https://install.python-poetry.org | python3 -
       - python/install-packages:
           pkg-manager: poetry
       - run:

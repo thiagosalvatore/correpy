@@ -1,4 +1,5 @@
 import io
+import pathlib
 from datetime import date
 from decimal import Decimal
 
@@ -11,8 +12,10 @@ from correpy.domain.enums import TransactionType
 from correpy.parsers.brokerage_notes.b3_parser.b3_parser import B3Parser
 
 
+fixtures_folder = f"{pathlib.Path(__file__).parent.parent.parent.parent.resolve()}/fixtures"
+
 def test_b3_parser_WHEN_called_with_single_page_note_THEN_correctly_parses_brokerage_note():
-    with open('tests/fixtures/b3_one_page.pdf', 'rb') as f:
+    with open(f'{fixtures_folder}/b3_one_page.pdf', 'rb') as f:
         content = io.BytesIO(f.read())
         content.seek(0)
         expected_result = [
@@ -27,6 +30,7 @@ def test_b3_parser_WHEN_called_with_single_page_note_THEN_correctly_parses_broke
                 execution=Decimal("0"),
                 custody_fee=Decimal("0"),
                 taxes=Decimal("0"),
+                irrf=Decimal("0.79"),
                 others=Decimal("0"),
                 transactions=[
                     Transaction(

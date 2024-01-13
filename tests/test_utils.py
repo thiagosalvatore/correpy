@@ -12,7 +12,7 @@ from correpy.utils import extract_date_from_line, extract_value_from_line
         ("MINERVA ON NM 2,50", Decimal("2.50")),
         ("Faria 1.200,50", Decimal("1200.50")),
         ("   1.962,90   ", Decimal("1962.90")),
-        ("Idade 200  123", Decimal("200")),
+        ("Idade 200  123", Decimal("123")),
         ("PETZ qtd 10", Decimal("10")),
         ("C VISTA 10,99", Decimal("10.99")),
         ("Saida 123 VISTA", Decimal("123")),

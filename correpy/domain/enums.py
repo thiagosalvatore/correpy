@@ -24,5 +24,6 @@ class BrokerageNoteFeeType(Enum):
     OPERATIONAL_FEE = "OPERATIONAL_FEE"
     EXECUTION = "EXECUTION"
     CUSTODY_FEE = "CUSTODY_FEE"
+    IRRF = "IRRF"
     TAXES = "TAXES"
     OTHERS = "OTHERS"

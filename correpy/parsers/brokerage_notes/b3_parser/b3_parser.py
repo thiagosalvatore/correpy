@@ -44,6 +44,7 @@ class B3Parser(BaseBrokerageNoteParser):
         "Taxa Operacional": BrokerageNoteFeeType.OPERATIONAL_FEE,
         "Execução": BrokerageNoteFeeType.EXECUTION,
         "Taxa de Custódia": BrokerageNoteFeeType.CUSTODY_FEE,
+        "I.R.R.F": BrokerageNoteFeeType.IRRF,
         "Impostos": BrokerageNoteFeeType.TAXES,
         "Outros": BrokerageNoteFeeType.OTHERS,
     }

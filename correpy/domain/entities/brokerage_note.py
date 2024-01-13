@@ -20,6 +20,7 @@ class BrokerageNote:  # pylint:disable=too-many-instance-attributes
     execution: Decimal = Decimal(0)
     custody_fee: Decimal = Decimal(0)
     taxes: Decimal = Decimal(0)
+    irrf: Decimal = Decimal(0)
     others: Decimal = Decimal(0)
     transactions: List[Transaction] = field(default_factory=list)
 
@@ -45,6 +46,8 @@ class BrokerageNote:  # pylint:disable=too-many-instance-attributes
             self.custody_fee += fee_value
         elif fee_type == BrokerageNoteFeeType.TAXES:
             self.taxes += fee_value
+        elif fee_type == BrokerageNoteFeeType.IRRF:
+            self.irrf += fee_value
         elif fee_type == BrokerageNoteFeeType.OTHERS:
             self.others += fee_value
         else:

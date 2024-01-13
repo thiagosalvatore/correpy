@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@1.5.0
+  python: circleci/python@2.1.1
 
 jobs:
   build-and-test:
@@ -27,7 +27,7 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          pkg-manager: poetry@1.7.1
+          pkg-manager: poetry
       - run:
           name: Build project
           command: poetry build

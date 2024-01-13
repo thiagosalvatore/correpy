@@ -13,8 +13,9 @@ jobs:
           # this is a workaround until circleci will support poetry 1.2.0
           name: Update poetry
           command: |
-            poetry self update
-            poetry install
+            curl -sSL https://install.python-poetry.org | python3 -
+      - python/install-packages:
+          pkg-manager: poetry
       - run:
           name: Run tests
           command: |

@@ -14,8 +14,7 @@ jobs:
           name: Update poetry
           command: |
             poetry self update
-      - python/install-packages:
-          pkg-manager: poetry
+            poetry install
       - run:
           name: Run tests
           command: |

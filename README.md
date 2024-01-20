@@ -91,6 +91,7 @@ Abaixo você pode encontrar a descrição de cada um dos campos retornados.
 | operational_fee  | Taxa Operacional                    |
 | execution        | Execução                            |
 | custody_fee      | Taxa de custódia                    |
+| source_withheld_taxes  | IRRF                    |
 | taxes            | Impostos                            |
 | others           | Outros                              |
 | transactions     | Lista de [transações](#transaction) |

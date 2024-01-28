@@ -7,7 +7,8 @@ from correpy.parsers.brokerage_notes.brokerage_note_section import BrokerageNote
 
 
 class NunInvestParser(B3Parser):
-	CI_TITLE = "Pav. 14, 15 - Torre A2 Jequitibá - Condomínio Parque da Cidade"
+	REFERENCE_NOTE_ID = "Número da nota"
+	CI_TITLE = "Valor/Ajuste D/C"
 	TRANSACTIONS_SECTION_TITLE = 'Nome do Cliente'
 	TRANSACTIONS_SUMMARY_TITLE = (
 		# sigle page

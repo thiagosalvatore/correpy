@@ -1,3 +1,5 @@
+import sys
+
 import factory
 from factory.fuzzy import FuzzyChoice
 
@@ -25,6 +27,7 @@ class TransactionFactory(factory.Factory):
 
 
 class BrokerageNoteFactory(factory.Factory):
+    reference_id = factory.Faker("random_int", min=1000, max=sys.maxsize)
     reference_date = factory.Faker("date_object")
     settlement_fee = factory.Faker("pydecimal", right_digits=2, max_value=1000, min_value=1, positive=True)
     registration_fee = factory.Faker("pydecimal", right_digits=2, max_value=1000, min_value=1, positive=True)

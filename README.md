@@ -80,21 +80,22 @@ Abaixo você pode encontrar a descrição de cada um dos campos retornados.
 
 #### Brokerage Note
 
-| BrokerageNote    |                                     |
-|------------------|-------------------------------------|
-| reference_date   | Data do pregão                      |
-| settlement_fee   | Taxa de liquidação                  |
-| registration_fee | Taxa de registro                    |
-| term_fee         | Taxa de termo/opções                |
-| ana_fee          | Taxa A.N.A                          |
-| emoluments       | Emolumentos                         |
-| operational_fee  | Taxa Operacional                    |
-| execution        | Execução                            |
-| custody_fee      | Taxa de custódia                    |
-| source_withheld_taxes  | IRRF                    |
-| taxes            | Impostos                            |
-| others           | Outros                              |
-| transactions     | Lista de [transações](#transaction) |
+| BrokerageNote         |                                     |
+|-----------------------|-------------------------------------|
+| reference_id          | Número da nota                      |
+| reference_date        | Data do pregão                      |
+| settlement_fee        | Taxa de liquidação                  |
+| registration_fee      | Taxa de registro                    |
+| term_fee              | Taxa de termo/opções                |
+| ana_fee               | Taxa A.N.A                          |
+| emoluments            | Emolumentos                         |
+| operational_fee       | Taxa Operacional                    |
+| execution             | Execução                            |
+| custody_fee           | Taxa de custódia                    |
+| source_withheld_taxes | IRRF                    |
+| taxes                 | Impostos                            |
+| others                | Outros                              |
+| transactions          | Lista de [transações](#transaction) |
 
 #### Transaction
 

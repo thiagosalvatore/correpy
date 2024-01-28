@@ -16,11 +16,13 @@ from correpy.parsers.brokerage_notes.word_rectangle import WordRectangle
 from correpy.parsers.fitz_parser import FitzParser
 from correpy.utils import extract_value_from_line
 
+NoteKey = tuple[int, date]
+
 
 class BaseBrokerageNoteParser(ABC):
     def __init__(self, brokerage_note: io.BytesIO, password: Optional[str] = None) -> None:
         self.fitz_parser = FitzParser(file=brokerage_note, password=password)
-        self.brokerage_notes: Dict[date, BrokerageNote] = {}
+        self.brokerage_notes: Dict[NoteKey, BrokerageNote] = {}
 
     @property
     @abstractmethod

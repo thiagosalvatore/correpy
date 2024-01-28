@@ -4,6 +4,7 @@ from decimal import Decimal
 
 NUMBER_STRUCTURE_REGEX = r"(?<![\d(\.|,)])(?:0,\d{2}|[1-9]\d{0,2}(?:\.\d{3})*,\d{2}|[1-9]\d{0,2})(?![\d(\.|,)])"
 DATE_STRUCTURE_REGEX = r"[\d]{1,2}/[\d]{1,2}/[\d]{4}"
+ID_STRUCTURE_REGEX = r'^\D*(\d+)'
 
 
 def extract_value_from_line(*, line: str) -> Decimal:
@@ -16,3 +17,8 @@ def extract_value_from_line(*, line: str) -> Decimal:
 def extract_date_from_line(*, line: str) -> date:
     reference_date_string = re.findall(DATE_STRUCTURE_REGEX, line)[0]
     return datetime.strptime(reference_date_string, "%d/%m/%Y").date()
+
+
+def extract_id_from_line(*, line: str) -> int:
+    """Extraction of the note id (number)"""
+    return int(re.search(ID_STRUCTURE_REGEX, line).group(1))

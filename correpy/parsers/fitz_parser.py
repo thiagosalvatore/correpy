@@ -30,9 +30,8 @@ class FitzParser:
     def search_and_extract_rectangle_from_text(cls, *, page: TextPage, text: Union[str, List[str]]) -> fitz.Rect:
         if isinstance(text, str):
             text = [text]
-        for text in text:
-            # multitext search
-            if quadrilateral_position := page.search(text):
+        for value in text:  # multi-text search
+            if quadrilateral_position := page.search(value):
                 break
         else:
             quadrilateral_position = None

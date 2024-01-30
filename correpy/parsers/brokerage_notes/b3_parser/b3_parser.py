@@ -11,7 +11,7 @@ from correpy.domain.enums import BrokerageNoteFeeType
 from correpy.parsers.brokerage_notes.base_parser import BaseBrokerageNoteParser
 from correpy.parsers.brokerage_notes.brokerage_note_section import BrokerageNoteSection
 from correpy.parsers.exceptions import ProblemParsingBrokerageNoteException
-from correpy.utils import extract_date_from_line, extract_value_from_line
+from correpy.utils import extract_date_from_line, extract_value_from_line, extract_id_from_line
 
 
 class B3Parser(BaseBrokerageNoteParser):
@@ -22,6 +22,7 @@ class B3Parser(BaseBrokerageNoteParser):
     TRANSACTIONS_SUMMARY_TITLE = "Resumo dos Negócios"
     FINANCIAL_SUMMARY_TITLE = "Resumo Financeiro"
     REFERENCE_DATE_TITLE = "Data pregão"
+    REFERENCE_NOTE_ID = "Nr. nota"
     CI_TITLE = "C.I"
     NET_VALUE_SECTION_TITLE = "Líquido para"
 
@@ -53,6 +54,11 @@ class B3Parser(BaseBrokerageNoteParser):
     @classmethod
     def __get_reference_date_from_section(cls, brokerage_note_section: BrokerageNoteSection) -> date:
         return extract_date_from_line(line=brokerage_note_section.full_text)
+
+    @classmethod
+    def __get_reference_id_from_section(cls, brokerage_note_section: BrokerageNoteSection) -> int:
+        """Extrai e retorna o número da nota 'ID'"""
+        return extract_id_from_line(line=brokerage_note_section.text_by_lines[1])
 
     def __build_full_width_rectangle(self, *, y_axis_start: int, y_axis_end: int) -> fitz.Rect:
         return fitz.Rect(
@@ -87,20 +93,29 @@ class B3Parser(BaseBrokerageNoteParser):
         return transaction_lines_text
 
     def _get_or_create_brokerage_note_by_page(self, page: TextPage, page_number: int) -> BrokerageNote:
-        reference_date_rect = self.fitz_parser.search_and_extract_rectangle_from_text(
-            page=page, text=self.REFERENCE_DATE_TITLE
+        reference_id_rect = self.fitz_parser.search_and_extract_rectangle_from_text(
+            page=page, text=self.REFERENCE_NOTE_ID
         )
+        # From the id block to c.i already includes the date rectangle
+        # reference_date_rect = self.fitz_parser.search_and_extract_rectangle_from_text(
+        #     page=page, text=self.REFERENCE_DATE_TITLE
+        # )
         ci_rect = self.fitz_parser.search_and_extract_rectangle_from_text(page=page, text=self.CI_TITLE)
         brokerage_note_summary_section = self._build_brokerage_note_section_from_two_rectangles(
-            first_rectangle=reference_date_rect, second_rectangle=ci_rect, page_number=page_number
+            first_rectangle=reference_id_rect, second_rectangle=ci_rect, page_number=page_number
+        )
+        current_reference_id = self.__get_reference_id_from_section(
+            brokerage_note_section=brokerage_note_summary_section
         )
         current_reference_date = self.__get_reference_date_from_section(
             brokerage_note_section=brokerage_note_summary_section
         )
-        if current_reference_date not in self.brokerage_notes:
-            brokerage_note = BrokerageNote(reference_date=current_reference_date)
-            self.brokerage_notes[current_reference_date] = brokerage_note
-        return self.brokerage_notes[current_reference_date]
+        note_key = (current_reference_id, current_reference_date)
+        if (brokerage_note := self.brokerage_notes.get(note_key)) is None:
+            brokerage_note = BrokerageNote(reference_id=current_reference_id,
+                                           reference_date=current_reference_date)
+            self.brokerage_notes[note_key] = brokerage_note
+        return brokerage_note
 
     def set_brokerage_note_transactions(self) -> None:
         for page_document in self.fitz_parser.document:  # type:ignore[union-attr]

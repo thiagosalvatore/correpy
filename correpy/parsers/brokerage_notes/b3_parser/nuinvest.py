@@ -10,12 +10,7 @@ class NunInvestParser(B3Parser):
 	REFERENCE_NOTE_ID = "Número da nota"
 	CI_TITLE = "Valor/Ajuste D/C"
 	TRANSACTIONS_SECTION_TITLE = 'Nome do Cliente'
-	TRANSACTIONS_SUMMARY_TITLE = (
-		# sigle page
-		"Resumo dos Negócios",
-		# multipage: end of page
-		"Ouvidoria NuInvest Corretora de Valores S.A"
-	)
+	TRANSACTIONS_SUMMARY_TITLE = "Resumo dos Negócios"
 	first_column_transactions = "Mercado"
 	last_transaction_item = "BOVESPA"
 

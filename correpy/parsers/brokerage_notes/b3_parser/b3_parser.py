@@ -130,18 +130,24 @@ class B3Parser(BaseBrokerageNoteParser):
                 transactions_title_rectangle = self.fitz_parser.search_and_extract_rectangle_from_text(
                     page=page, text=self.TRANSACTIONS_SECTION_TITLE
                 )
-                transactions_summary_title_rectangle = self.fitz_parser.search_and_extract_rectangle_from_text(
-                    page=page, text=self.TRANSACTIONS_SUMMARY_TITLE
-                )
-
                 rectangle_before_transactions = self.__build_full_width_rectangle(
                     y_axis_start=transactions_title_rectangle.y0,  # pylint:disable=no-member
                     y_axis_end=transactions_title_rectangle.y1,  # pylint:disable=no-member
                 )
-                rectangle_after_transactions = self.__build_full_width_rectangle(
-                    y_axis_start=transactions_summary_title_rectangle.y0,  # pylint:disable=no-member
-                    y_axis_end=transactions_summary_title_rectangle.y1,  # pylint:disable=no-member
-                )
+                try:
+                    transactions_summary_title_rectangle = self.fitz_parser.search_and_extract_rectangle_from_text(
+                        page=page, text=self.TRANSACTIONS_SUMMARY_TITLE
+                    )
+                    rectangle_after_transactions = self.__build_full_width_rectangle(
+                        y_axis_start=transactions_summary_title_rectangle.y0,  # pylint:disable=no-member
+                        y_axis_end=transactions_summary_title_rectangle.y1,  # pylint:disable=no-member
+                    )
+                except ProblemParsingBrokerageNoteException:
+                    # From the text rectangle 'rectangle_before_transactions' to the end of the page.
+                    rectangle_after_transactions = fitz.Rect(
+                        transactions_title_rectangle.x0, transactions_title_rectangle.y0,
+                        page.rect.width, page.rect.height
+                    )
                 transactions_brokerage_note_section = self._build_brokerage_note_section_from_two_rectangles(
                     first_rectangle=rectangle_before_transactions,
                     second_rectangle=rectangle_after_transactions,

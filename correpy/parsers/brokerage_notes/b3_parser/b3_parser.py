@@ -96,11 +96,15 @@ class B3Parser(BaseBrokerageNoteParser):
         reference_id_rect = self.fitz_parser.search_and_extract_rectangle_from_text(
             page=page, text=self.REFERENCE_NOTE_ID
         )
-        # From the id block to c.i already includes the date rectangle
-        # reference_date_rect = self.fitz_parser.search_and_extract_rectangle_from_text(
-        #     page=page, text=self.REFERENCE_DATE_TITLE
-        # )
-        ci_rect = self.fitz_parser.search_and_extract_rectangle_from_text(page=page, text=self.CI_TITLE)
+        try:
+            ci_rect = self.fitz_parser.search_and_extract_rectangle_from_text(page=page, text=self.CI_TITLE)
+        except ProblemParsingBrokerageNoteException:
+            # From the initial text to 1/4 of the end of the page. It is this way because
+            # the final text (CI_TITLE) is not always available (multiple pages).
+            ci_rect = fitz.Rect(
+                reference_id_rect.x0, reference_id_rect.y0,
+                page.rect.width, page.rect.height * 0.25
+            )
         brokerage_note_summary_section = self._build_brokerage_note_section_from_two_rectangles(
             first_rectangle=reference_id_rect, second_rectangle=ci_rect, page_number=page_number
         )
@@ -126,18 +130,24 @@ class B3Parser(BaseBrokerageNoteParser):
                 transactions_title_rectangle = self.fitz_parser.search_and_extract_rectangle_from_text(
                     page=page, text=self.TRANSACTIONS_SECTION_TITLE
                 )
-                transactions_summary_title_rectangle = self.fitz_parser.search_and_extract_rectangle_from_text(
-                    page=page, text=self.TRANSACTIONS_SUMMARY_TITLE
-                )
-
                 rectangle_before_transactions = self.__build_full_width_rectangle(
                     y_axis_start=transactions_title_rectangle.y0,  # pylint:disable=no-member
                     y_axis_end=transactions_title_rectangle.y1,  # pylint:disable=no-member
                 )
-                rectangle_after_transactions = self.__build_full_width_rectangle(
-                    y_axis_start=transactions_summary_title_rectangle.y0,  # pylint:disable=no-member
-                    y_axis_end=transactions_summary_title_rectangle.y1,  # pylint:disable=no-member
-                )
+                try:
+                    transactions_summary_title_rectangle = self.fitz_parser.search_and_extract_rectangle_from_text(
+                        page=page, text=self.TRANSACTIONS_SUMMARY_TITLE
+                    )
+                    rectangle_after_transactions = self.__build_full_width_rectangle(
+                        y_axis_start=transactions_summary_title_rectangle.y0,  # pylint:disable=no-member
+                        y_axis_end=transactions_summary_title_rectangle.y1,  # pylint:disable=no-member
+                    )
+                except ProblemParsingBrokerageNoteException:
+                    # From the text rectangle 'rectangle_before_transactions' to the end of the page.
+                    rectangle_after_transactions = fitz.Rect(
+                        transactions_title_rectangle.x0, transactions_title_rectangle.y0,
+                        page.rect.width, page.rect.height
+                    )
                 transactions_brokerage_note_section = self._build_brokerage_note_section_from_two_rectangles(
                     first_rectangle=rectangle_before_transactions,
                     second_rectangle=rectangle_after_transactions,
@@ -187,7 +197,8 @@ class B3Parser(BaseBrokerageNoteParser):
                     page_number=page_number,
                 )
 
-            except ProblemParsingBrokerageNoteException:
+            except ProblemParsingBrokerageNoteException as exc:
+                print(exc)
                 continue
 
     def __set_brokerage_note_fees(

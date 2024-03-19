@@ -198,7 +198,6 @@ class B3Parser(BaseBrokerageNoteParser):
                 )
 
             except ProblemParsingBrokerageNoteException as exc:
-                print(exc)
                 continue
 
     def __set_brokerage_note_fees(

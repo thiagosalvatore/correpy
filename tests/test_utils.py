@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pytest import mark
 
-from correpy.utils import extract_date_from_line, extract_value_from_line
+from correpy.utils import extract_date_from_line, extract_value_from_line, extract_amount_from_line
 
 
 @mark.parametrize(
@@ -25,13 +25,28 @@ from correpy.utils import extract_date_from_line, extract_value_from_line
         ("02.0", Decimal("0")),
     ],
 )
-
 def test_extract_value_from_line_when_called_then_returns_value_correctly(input_string, expected_result):
     assert extract_value_from_line(line=input_string) == expected_result
 
 
 def test_extract_value_from_line_when_called_within_value_then_return_zero_value():
     assert extract_value_from_line(line="... ") == Decimal("0")
+
+@mark.parametrize(
+    "input_string, expected_result",
+    [
+        ("1", Decimal("1")),
+        ("100", Decimal("100")),
+        ("999", Decimal("999")),
+        ("2.000", Decimal("2000")),
+        ("3.000", Decimal("3000")),
+        ("1.000.000", Decimal("1000000")),
+        ("1.000.000,00", Decimal("0")),
+    ],
+)
+def test_extract_amount_value_from_line_when_called_then_returns_value_correctly(input_string, expected_result):
+    """Test quantities with digit class separator"""
+    assert extract_amount_from_line(line=input_string) == expected_result
 
 
 def test_extract_date_from_line_when_called_then_returns_date_correctly():

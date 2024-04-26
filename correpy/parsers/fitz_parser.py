@@ -18,7 +18,7 @@ class FitzParser:
 
     @classmethod
     def build_rectangle_from_beginning_first_rectangle_end_second_rectangle(
-        cls, first_rect: fitz.Rect, second_rect: fitz.Rect
+            cls, first_rect: fitz.Rect, second_rect: fitz.Rect
     ) -> fitz.Rect:
         return first_rect | second_rect
 
@@ -60,3 +60,9 @@ class FitzParser:
     def __parse_fitz_word_tuple_to_word_object(text_page: fitz.TextPage) -> List[WordRectangle]:
         extracted_words = text_page.extractWORDS()
         return [WordRectangle(word[0], word[1], word[2], word[3], word[4]) for word in extracted_words]
+
+    def is_text_in_document(self, *, text: str) -> bool:
+        for page_document in self.document:
+            if page_document.get_textpage().search(text):
+                return True
+        return False

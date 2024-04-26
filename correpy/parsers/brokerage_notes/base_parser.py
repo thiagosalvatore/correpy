@@ -70,7 +70,7 @@ class BaseBrokerageNoteParser(ABC):
         return " ".join(line)
 
     def _build_text_from_all_words_in_line(
-        self, words_grouped_by_line: Iterable[Tuple[float, Iterable[WordRectangle]]]
+            self, words_grouped_by_line: Iterable[Tuple[float, Iterable[WordRectangle]]]
     ) -> str:
         return "".join(self._build_text_from_words(words=words) for _, words in words_grouped_by_line)
 
@@ -79,7 +79,7 @@ class BaseBrokerageNoteParser(ABC):
         return [word.value for word in words]
 
     def _sort_and_group_elements_by_line_on_file(
-        self, elements: List[WordRectangle]
+            self, elements: List[WordRectangle]
     ) -> Iterable[Iterable[WordRectangle]]:
         elements_text = self._sort_words_per_line_then_per_column(words=elements)
         return self._group_words_by_line(words=elements_text)
@@ -92,8 +92,9 @@ class BaseBrokerageNoteParser(ABC):
 
     def __parse_security_name(self, *, line_array: List[str]) -> str:
         security_name_array = line_array[
-            self.transaction_columns_index["start_short_name"] : self.transaction_columns_index["end_short_name"]
-        ]
+                              self.transaction_columns_index["start_short_name"]: self.transaction_columns_index[
+                                  "end_short_name"]
+                              ]
         return " ".join(security_name_array)
 
     def __parse_transaction_unit_price(self, *, line_array: List[str]) -> Decimal:
@@ -119,10 +120,10 @@ class BaseBrokerageNoteParser(ABC):
         )
 
     def _build_brokerage_note_section_from_two_rectangles(
-        self,
-        first_rectangle: fitz.Rect,
-        second_rectangle: fitz.Rect,
-        page_number: int,
+            self,
+            first_rectangle: fitz.Rect,
+            second_rectangle: fitz.Rect,
+            page_number: int,
     ) -> BrokerageNoteSection:
         rectangle_between = self.fitz_parser.build_rectangle_from_beginning_first_rectangle_end_second_rectangle(
             first_rect=first_rectangle, second_rect=second_rectangle

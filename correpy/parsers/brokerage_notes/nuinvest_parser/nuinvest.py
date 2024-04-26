@@ -6,7 +6,7 @@ from correpy.parsers.brokerage_notes.b3_parser.b3_parser import B3Parser
 from correpy.parsers.brokerage_notes.brokerage_note_section import BrokerageNoteSection
 
 
-class NunInvestParser(B3Parser):
+class NuInvestParser(B3Parser):
 	REFERENCE_NOTE_ID = "Número da nota"
 	CI_TITLE = "Valor/Ajuste D/C"
 	TRANSACTIONS_SECTION_TITLE = 'Nome do Cliente'

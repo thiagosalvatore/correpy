@@ -14,9 +14,7 @@ from correpy.parsers.fitz_parser import FitzParser
 
 
 class ParserFactory:
-    CNPJ_PARSER_MAP = {
-        "62.169.875/0001-79": NuInvestParser
-    }
+    CNPJ_PARSER_MAP = {"62.169.875/0001-79": NuInvestParser}
 
     def __init__(self, brokerage_note: io.BytesIO, password: Optional[str] = None):
         self.__brokerage_note = brokerage_note

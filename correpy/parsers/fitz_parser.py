@@ -18,7 +18,7 @@ class FitzParser:
 
     @classmethod
     def build_rectangle_from_beginning_first_rectangle_end_second_rectangle(
-            cls, first_rect: fitz.Rect, second_rect: fitz.Rect
+        cls, first_rect: fitz.Rect, second_rect: fitz.Rect
     ) -> fitz.Rect:
         return first_rect | second_rect
 

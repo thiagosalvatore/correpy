@@ -101,10 +101,7 @@ class B3Parser(BaseBrokerageNoteParser):
         except ProblemParsingBrokerageNoteException:
             # From the initial text to 1/4 of the end of the page. It is this way because
             # the final text (CI_TITLE) is not always available (multiple pages).
-            ci_rect = fitz.Rect(
-                reference_id_rect.x0, reference_id_rect.y0,
-                page.rect.width, page.rect.height * 0.25
-            )
+            ci_rect = fitz.Rect(reference_id_rect.x0, reference_id_rect.y0, page.rect.width, page.rect.height * 0.25)
         brokerage_note_summary_section = self._build_brokerage_note_section_from_two_rectangles(
             first_rectangle=reference_id_rect, second_rectangle=ci_rect, page_number=page_number
         )
@@ -116,8 +113,7 @@ class B3Parser(BaseBrokerageNoteParser):
         )
         note_key = (current_reference_id, current_reference_date)
         if (brokerage_note := self.brokerage_notes.get(note_key)) is None:
-            brokerage_note = BrokerageNote(reference_id=current_reference_id,
-                                           reference_date=current_reference_date)
+            brokerage_note = BrokerageNote(reference_id=current_reference_id, reference_date=current_reference_date)
             self.brokerage_notes[note_key] = brokerage_note
         return brokerage_note
 
@@ -145,8 +141,10 @@ class B3Parser(BaseBrokerageNoteParser):
                 except ProblemParsingBrokerageNoteException:
                     # From the text rectangle 'rectangle_before_transactions' to the end of the page.
                     rectangle_after_transactions = fitz.Rect(
-                        transactions_title_rectangle.x0, transactions_title_rectangle.y0,
-                        page.rect.width, page.rect.height
+                        transactions_title_rectangle.x0,
+                        transactions_title_rectangle.y0,
+                        page.rect.width,
+                        page.rect.height,
                     )
                 transactions_brokerage_note_section = self._build_brokerage_note_section_from_two_rectangles(
                     first_rectangle=rectangle_before_transactions,

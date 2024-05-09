@@ -5,7 +5,7 @@ from decimal import Decimal
 NUMBER_STRUCTURE_REGEX = r"(?<![\d(\.|,)])(?:0,\d{2}|[1-9]\d{0,2}(?:\.\d{3})*,\d{2}|[1-9]\d{0,2})(?![\d(\.|,)])"
 AMOUNT_STRUCTURE_REGEX = r"(?<![\d.,])(?:0|[1-9]\d{0,2}(?:\.\d{3})*)(?![\d.,])"
 DATE_STRUCTURE_REGEX = r"[\d]{1,2}/[\d]{1,2}/[\d]{4}"
-ID_STRUCTURE_REGEX = r'^\D*(\d+)'
+ID_STRUCTURE_REGEX = r"^\D*(\d+)"
 
 
 def extract_value_from_line(*, line: str) -> Decimal:

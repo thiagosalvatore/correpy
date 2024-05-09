@@ -27,13 +27,13 @@ Se a sua nota de corretagem possuir senha, você precisará informar também, ca
 ```python
 import io
 
-from correpy.parsers.brokerage_notes.b3_parser.b3_parser import B3Parser
+from correpy.parsers.brokerage_notes.parser_factory import ParserFactory
 
 with open('path to your pdf file', 'rb') as f:
     content = io.BytesIO(f.read())
     content.seek(0)
     
-    brokerage_notes = B3Parser(brokerage_note=content, password="password").parse_brokerage_note()
+    brokerage_notes = ParserFactory(brokerage_note=content, password="password").parse_brokerage_note()
 ```
 
 ### Resultado

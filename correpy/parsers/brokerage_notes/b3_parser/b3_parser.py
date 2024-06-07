@@ -71,7 +71,7 @@ class B3Parser(BaseBrokerageNoteParser):
     def _is_transactions_header_line(self, line_text: str) -> bool:
         return line_text[: len(self.first_column_transactions)] == self.first_column_transactions
 
-    def __is_transactions_last_line(self, line_text: str) -> bool:
+    def _is_transactions_last_line(self, line_text: str) -> bool:
         return line_text[: len(self.last_transaction_item)] == self.last_transaction_item
 
     def _get_transaction_lines_text_from_words(
@@ -80,7 +80,7 @@ class B3Parser(BaseBrokerageNoteParser):
         transaction_lines_text = []
         can_include_transactions = False
         for transaction_full_line in transactions_brokerage_note_section.text_by_lines:
-            if self.__is_transactions_last_line(line_text=transaction_full_line):
+            if self._is_transactions_last_line(line_text=transaction_full_line):
                 can_include_transactions = False
 
             if can_include_transactions:

@@ -10,11 +10,15 @@ from correpy.domain.entities.brokerage_note import BrokerageNote
 from correpy.parsers.brokerage_notes.b3_parser.b3_parser import B3Parser
 from correpy.parsers.brokerage_notes.base_parser import BaseBrokerageNoteParser
 from correpy.parsers.brokerage_notes.nuinvest_parser.nuinvest import NuInvestParser
+from correpy.parsers.brokerage_notes.inter_parser.inter import InterParser
 from correpy.parsers.fitz_parser import FitzParser
 
 
 class ParserFactory:
-    CNPJ_PARSER_MAP = {"62.169.875/0001-79": NuInvestParser}
+    CNPJ_PARSER_MAP = {
+        "62.169.875/0001-79": NuInvestParser,
+        "18.945.670/0001-46": InterParser
+    }
 
     def __init__(self, brokerage_note: io.BytesIO, password: Optional[str] = None):
         self.__brokerage_note = brokerage_note

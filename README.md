@@ -42,6 +42,7 @@ Depois de efetuar o parser da sua nota de corretagem, `correpy` irá retornar um
 ```python
 [
     BrokerageNote(
+        reference_id=254304,
         reference_date=date(2022, 5, 2),
         settlement_fee=Decimal("7.92"),
         registration_fee=Decimal("0"),

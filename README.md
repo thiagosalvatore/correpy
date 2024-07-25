@@ -33,7 +33,7 @@ with open('path to your pdf file', 'rb') as f:
     content = io.BytesIO(f.read())
     content.seek(0)
     
-    brokerage_notes = ParserFactory(brokerage_note=content, password="password").parse_brokerage_note()
+    brokerage_notes = ParserFactory(brokerage_note=content, password="password").parse()
 ```
 
 ### Resultado

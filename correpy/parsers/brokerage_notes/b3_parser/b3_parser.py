@@ -1,5 +1,5 @@
 import logging
-from datetime import date
+from datetime import date, timedelta
 from re import sub
 from typing import List
 
@@ -43,6 +43,8 @@ class B3Parser(BaseBrokerageNoteParser):
         "Taxa A.N.A.": BrokerageNoteFeeType.ANA_FEE,
         "Emolumentos": BrokerageNoteFeeType.EMOLUMENTS,
         "Taxa Operacional": BrokerageNoteFeeType.OPERATIONAL_FEE,
+        "Clearing": BrokerageNoteFeeType.CLEARING,
+        "ISS": BrokerageNoteFeeType.ISS,
         "Execução": BrokerageNoteFeeType.EXECUTION,
         "Taxa de Custódia": BrokerageNoteFeeType.CUSTODY_FEE,
         "I.R.R.F": BrokerageNoteFeeType.IRRF,
@@ -50,6 +52,10 @@ class B3Parser(BaseBrokerageNoteParser):
         "Outros": BrokerageNoteFeeType.OTHERS,
     }
     last_transaction_item = "Resumo dos Negócios"
+
+    @property
+    def market_identifiers(self) -> List[str]:
+        return ["B3 RV LISTADO", "B3 RF LISTADO", "1-BOVESPA"]
 
     @classmethod
     def __get_reference_date_from_section(cls, brokerage_note_section: BrokerageNoteSection) -> date:
@@ -174,6 +180,19 @@ class B3Parser(BaseBrokerageNoteParser):
             self.BROKERAGE_NOTE_X_AXIS_START_COORDINATE, self.BROKERAGE_NOTE_FINANCIAL_SUMMARY_Y_AXIS_END, 0, 0
         )
 
+    def __parse_net_amount_section(
+        self, financial_summary_brokerage_note_section: BrokerageNoteSection, page: fitz.TextPage, page_number: int
+    ) -> None:
+        for line in financial_summary_brokerage_note_section.text_by_lines:
+            if line.startswith(self.NET_VALUE_SECTION_TITLE):
+                brokerage_note = self._get_or_create_brokerage_note_by_page(page=page, page_number=page_number)
+                # If we can't find a date in the line, use reference date + 2 days (standard settlement period)
+                net_date = extract_date_from_line(line=line)
+                if net_date == date.today():  # If no date was found in the line
+                    net_date = brokerage_note.reference_date + timedelta(days=2)
+                brokerage_note.update_net_amount_date(net_date=net_date)
+                break
+
     def set_brokerage_note_fees(self) -> None:
         for page_document in self.fitz_parser.document:  # type:ignore[union-attr]
             page = page_document.get_textpage()
@@ -190,6 +209,12 @@ class B3Parser(BaseBrokerageNoteParser):
                 )
 
                 self.__set_brokerage_note_fees(
+                    financial_summary_brokerage_note_section=financial_summary_brokerage_note_section,
+                    page=page,
+                    page_number=page_number,
+                )
+                
+                self.__parse_net_amount_section(
                     financial_summary_brokerage_note_section=financial_summary_brokerage_note_section,
                     page=page,
                     page_number=page_number,

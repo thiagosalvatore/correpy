@@ -23,8 +23,9 @@ def extract_amount_from_line(*, line: str) -> Decimal:
 
 
 def extract_date_from_line(*, line: str) -> date:
-    reference_date_string = re.findall(DATE_STRUCTURE_REGEX, line)[0]
-    return datetime.strptime(reference_date_string, "%d/%m/%Y").date()
+    if date_matches := re.findall(DATE_STRUCTURE_REGEX, line):
+        return datetime.strptime(date_matches[0], "%d/%m/%Y").date()
+    return date.today()  # Return today's date as a fallback
 
 
 def extract_id_from_line(*, line: str) -> int:

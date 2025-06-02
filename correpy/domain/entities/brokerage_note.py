@@ -18,15 +18,21 @@ class BrokerageNote:  # pylint:disable=too-many-instance-attributes
     ana_fee: Decimal = Decimal(0)
     emoluments: Decimal = Decimal(0)
     operational_fee: Decimal = Decimal(0)
+    clearing: Decimal = Decimal(0)
+    iss: Decimal = Decimal(0)
     execution: Decimal = Decimal(0)
     custody_fee: Decimal = Decimal(0)
     taxes: Decimal = Decimal(0)
     irrf: Decimal = Decimal(0)
     others: Decimal = Decimal(0)
+    net_amount_date: date = field(default_factory=date.today)
     transactions: List[Transaction] = field(default_factory=list)
 
     def add_transaction(self, transaction: Transaction) -> None:
         self.transactions.append(transaction)
+
+    def update_net_amount_date(self, net_date: date) -> None:
+        self.net_amount_date = net_date
 
     def update_fee_from_fee_type(self, fee_type: BrokerageNoteFeeType, fee_value: Decimal) -> None:
         if fee_type == BrokerageNoteFeeType.SETTLEMENT_FEE:
@@ -43,6 +49,10 @@ class BrokerageNote:  # pylint:disable=too-many-instance-attributes
             self.operational_fee += fee_value
         elif fee_type == BrokerageNoteFeeType.EXECUTION:
             self.execution += fee_value
+        elif fee_type == BrokerageNoteFeeType.CLEARING:
+            self.clearing += fee_value
+        elif fee_type == BrokerageNoteFeeType.ISS:
+            self.iss += fee_value
         elif fee_type == BrokerageNoteFeeType.CUSTODY_FEE:
             self.custody_fee += fee_value
         elif fee_type == BrokerageNoteFeeType.TAXES:

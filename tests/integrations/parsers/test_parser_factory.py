@@ -39,6 +39,7 @@ def test_parser_factory_WHEN_called_with_brokerage_note_not_from_nu_invest_THEN_
                 taxes=Decimal("0"),
                 irrf=Decimal("0.79"),
                 others=Decimal("0"),
+                net_amount_date=date(2022, 5, 4),
                 transactions=[
                     Transaction(
                         transaction_type=TransactionType.SELL,

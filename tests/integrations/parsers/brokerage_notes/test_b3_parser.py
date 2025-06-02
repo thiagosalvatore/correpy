@@ -33,6 +33,7 @@ def test_b3_parser_WHEN_called_with_single_page_note_THEN_correctly_parses_broke
                 taxes=Decimal("0"),
                 irrf=Decimal("0.79"),
                 others=Decimal("0"),
+                net_amount_date=date(2022, 5, 4),
                 transactions=[
                     Transaction(
                         transaction_type=TransactionType.SELL,
